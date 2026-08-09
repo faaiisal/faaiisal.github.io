@@ -1,4 +1,4 @@
-name: Deploy Next.js Portfolio to GitHub Pages
+name: Deploy Next.js Portfolio
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
@@ -20,11 +20,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -38,8 +38,8 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Upload Next.js static export
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload Next.js output
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
 
