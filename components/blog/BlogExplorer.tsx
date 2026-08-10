@@ -1,12 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { blogPosts, blogTags } from '@/data/blog';
+
+const POSTS_PER_PAGE = 6;
 
 export function BlogExplorer() {
   const [query, setQuery] = useState('');
   const [activeTag, setActiveTag] = useState('All');
+  const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
 
   const filteredPosts = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -22,6 +25,14 @@ export function BlogExplorer() {
       return inTag && inSearch;
     });
   }, [activeTag, query]);
+
+  useEffect(() => {
+    setVisibleCount(POSTS_PER_PAGE);
+  }, [activeTag, query]);
+
+  const visiblePosts = filteredPosts.slice(0, visibleCount);
+  const hasMorePosts = visibleCount < filteredPosts.length;
+  const showNoResults = filteredPosts.length === 0;
 
   return (
     <section className="section">
@@ -58,7 +69,7 @@ export function BlogExplorer() {
         </div>
 
         <div className="posts-grid">
-          {filteredPosts.map((post) => (
+          {visiblePosts.map((post) => (
             <article className="post-card" key={post.slug} data-tags={post.tags.join(',')} data-search={post.description}>
               <Link className="post-card-link" href={`/blog/${post.slug}`}>
                 <div className="post-meta-row"><span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span><span>·</span><span>{post.readingTime}</span></div>
@@ -74,13 +85,21 @@ export function BlogExplorer() {
           ))}
         </div>
 
-        {filteredPosts.length === 0 && <p className="blog-no-results">No articles match your search. Try a different keyword or tag.</p>}
+        <p className={`blog-no-results ${showNoResults ? 'is-visible' : ''}`}>
+          No articles match your search. Try a different keyword or tag.
+        </p>
 
-        <div className="load-more-wrap">
-          <button className="btn btn-secondary load-more-btn" type="button" style={{ display: 'none' }}>
-            Load More Articles
-          </button>
-        </div>
+        {hasMorePosts && !showNoResults && (
+          <div className="load-more-wrap">
+            <button
+              className="btn btn-secondary load-more-btn"
+              type="button"
+              onClick={() => setVisibleCount((count) => Math.min(count + 3, filteredPosts.length))}
+            >
+              Load More Articles
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
