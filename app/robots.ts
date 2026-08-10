@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://www.faisalahmed.dev';
+const BASE_URL = 'https://faaiisal.github.io/';
+export const dynamic = 'force-static';
 
 export default function robots(): MetadataRoute.Robots {
   return {
