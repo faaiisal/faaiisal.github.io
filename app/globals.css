@@ -2369,53 +2369,74 @@ h3.card-title {
 
 .post-nav {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-5);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
   margin-top: var(--space-8);
   padding-top: var(--space-6);
   border-top: 1px solid var(--color-border);
 }
 
-.post-nav a {
-  display: block;
-  padding: var(--space-5);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  transition: border-color var(--transition-fast), transform var(--transition-fast);
+.post-nav-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 2px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  min-height: 74px;
+  box-shadow: 0 8px 0 -4px rgba(0, 0, 0, 0.06);
+  transition: border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.post-nav a:hover {
+.post-nav-card:hover {
   border-color: var(--color-primary);
+  color: var(--color-primary);
   transform: translateY(-2px);
+  box-shadow: 0 12px 0 -6px rgba(0, 0, 0, 0.08);
 }
 
 .post-nav-prev {
-  text-align: left;
+  justify-content: flex-start;
 }
 
 .post-nav-next {
-  text-align: right;
+  justify-content: flex-end;
 }
 
-.post-nav span {
+.post-nav-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.post-nav-label {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: inherit;
 }
 
-.post-nav strong {
-  font-size: 0.95rem;
-  color: var(--color-text);
-  font-weight: 600;
+.post-nav-placeholder {
+  display: block;
+  min-height: 74px;
 }
 
 @media (max-width: 640px) {
   .post-nav {
     grid-template-columns: 1fr;
+  }
+
+  .post-nav-card {
+    justify-content: center;
   }
 }
 

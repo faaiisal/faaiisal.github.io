@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { getRelatedPosts } from '@/data/blog';
+import { getBlogPostBySlug, getRelatedPosts } from '@/data/blog';
 import type { BlogPost } from '@/types/blog';
 
 export function BlogDetail({ post, prevSlug, nextSlug }: { post: BlogPost; prevSlug?: string; nextSlug?: string }) {
   const relatedPosts = getRelatedPosts(post.slug);
+  const prevPost = prevSlug ? getBlogPostBySlug(prevSlug) : undefined;
+  const nextPost = nextSlug ? getBlogPostBySlug(nextSlug) : undefined;
 
   return (
     <article className="post-detail-header section-tight">
@@ -15,12 +17,15 @@ export function BlogDetail({ post, prevSlug, nextSlug }: { post: BlogPost; prevS
           </svg>
           Back to articles
         </Link>
+
         <div className="post-meta-top">
           <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>
           <span className="dot-separator">&bull;</span>
           <span>{post.readingTime}</span>
         </div>
+
         <h1 className="post-title-main">{post.title}</h1>
+
         <div className="post-detail-tags">
           {post.tags.map((tag) => (
             <span className="post-tag-chip" key={`${post.slug}-${tag}`}>{tag}</span>
@@ -75,49 +80,21 @@ export function BlogDetail({ post, prevSlug, nextSlug }: { post: BlogPost; prevS
         )}
 
         <div className="post-nav">
-          {prevSlug ? (
-            <Link className="post-nav-prev" href={`/blog/${prevSlug}`}>
-              <span>← Previous</span>
-              <strong>{getPrevTitle(prevSlug)}</strong>
+          {prevPost ? (
+            <Link className="post-nav-card post-nav-prev" href={`/blog/${prevPost.slug}`} aria-label={`Previous article: ${prevPost.title}`}>
+              <span className="post-nav-arrow" aria-hidden="true">←</span>
+              <span className="post-nav-label">Prev</span>
             </Link>
-          ) : <span />}
+          ) : <span className="post-nav-placeholder" />}
 
-          {nextSlug ? (
-            <Link className="post-nav-next" href={`/blog/${nextSlug}`}>
-              <span>Next →</span>
-              <strong>{getNextTitle(nextSlug)}</strong>
+          {nextPost ? (
+            <Link className="post-nav-card post-nav-next" href={`/blog/${nextPost.slug}`} aria-label={`Next article: ${nextPost.title}`}>
+              <span className="post-nav-label">Next</span>
+              <span className="post-nav-arrow" aria-hidden="true">→</span>
             </Link>
-          ) : <span />}
+          ) : <span className="post-nav-placeholder" />}
         </div>
       </div>
     </article>
   );
-}
-
-function getPrevTitle(slug: string) {
-  const map: Record<string, string> = {
-    'how-to-build-maintainable-frontend-interfaces': 'How to Build Maintainable Frontend Interfaces',
-    'figma-to-production-workflow': 'Figma to Production: A Practical Frontend Workflow',
-    'elementor-vs-custom-wordpress-development': 'Elementor vs Custom WordPress Development',
-    'improving-wordpress-frontend-performance': 'Improving WordPress Frontend Performance',
-    'building-responsive-interfaces-with-modern-css': 'Building Responsive Interfaces with Modern CSS',
-    'what-makes-a-good-ui-engineer': 'What Makes a Good UI Engineer?',
-    'ai-assisted-frontend-development': 'AI-Assisted Frontend Development in Practice',
-    'wordpress-to-frontend-engineering': 'Moving From WordPress Development to Modern Frontend Engineering'
-  };
-  return map[slug] ?? 'Previous';
-}
-
-function getNextTitle(slug: string) {
-  const map: Record<string, string> = {
-    'how-to-build-maintainable-frontend-interfaces': 'How to Build Maintainable Frontend Interfaces',
-    'figma-to-production-workflow': 'Figma to Production: A Practical Frontend Workflow',
-    'elementor-vs-custom-wordpress-development': 'Elementor vs Custom WordPress Development',
-    'improving-wordpress-frontend-performance': 'Improving WordPress Frontend Performance',
-    'building-responsive-interfaces-with-modern-css': 'Building Responsive Interfaces with Modern CSS',
-    'what-makes-a-good-ui-engineer': 'What Makes a Good UI Engineer?',
-    'ai-assisted-frontend-development': 'AI-Assisted Frontend Development in Practice',
-    'wordpress-to-frontend-engineering': 'Moving From WordPress Development to Modern Frontend Engineering'
-  };
-  return map[slug] ?? 'Next';
 }
