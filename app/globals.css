@@ -1791,10 +1791,15 @@ h3.card-title {
   transition: max-height var(--transition-slow) ease;
 }
 
+.accordion-panel.is-open {
+  max-height: 500px;
+}
+
 .accordion-panel-inner {
   padding: 0 var(--space-2) var(--space-5);
   color: var(--color-text-muted);
   max-width: 700px;
+  line-height: 1.7;
 }
 
 /* -------------------------------------------------------------------------

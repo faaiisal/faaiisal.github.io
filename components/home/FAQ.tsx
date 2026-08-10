@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 const faqs = [
   {
     id: 'faq-1',
@@ -32,6 +36,12 @@ const faqs = [
 ];
 
 export function FAQ() {
+  const [openFaqId, setOpenFaqId] = useState(faqs[0].id);
+
+  const toggleFaq = (id: string) => {
+    setOpenFaqId((current) => (current === id ? '' : id));
+  };
+
   return (
     <section id="faq" className="section section-alt">
       <div className="container">
@@ -45,19 +55,36 @@ export function FAQ() {
       </div>
       <div className="container container--narrow">
         <div className="accordion" role="presentation">
-          {faqs.map((item, index) => (
-            <div className="accordion-item" key={item.id}>
-              <h3>
-                <button className="accordion-trigger" aria-expanded={index === 0 ? 'true' : 'false'} aria-controls={item.id} id={`faq-trigger-${index + 1}`} type="button">
-                  <span>{item.question}</span>
-                  <span className="plus-icon" aria-hidden="true" />
-                </button>
-              </h3>
-              <div className="accordion-panel" id={item.id} role="region" aria-labelledby={`faq-trigger-${index + 1}`}>
-                <div className="accordion-panel-inner">{item.answer}</div>
+          {faqs.map((item, index) => {
+            const isOpen = openFaqId === item.id;
+
+            return (
+              <div className="accordion-item" key={item.id}>
+                <h3>
+                  <button
+                    className="accordion-trigger"
+                    aria-expanded={isOpen}
+                    aria-controls={item.id}
+                    id={`faq-trigger-${index + 1}`}
+                    type="button"
+                    onClick={() => toggleFaq(item.id)}
+                  >
+                    <span>{item.question}</span>
+                    <span className="plus-icon" aria-hidden="true" />
+                  </button>
+                </h3>
+                <div
+                  className={`accordion-panel ${isOpen ? 'is-open' : ''}`}
+                  id={item.id}
+                  role="region"
+                  aria-labelledby={`faq-trigger-${index + 1}`}
+                  style={{ maxHeight: isOpen ? '500px' : '0px' }}
+                >
+                  <div className="accordion-panel-inner">{item.answer}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
