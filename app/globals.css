@@ -524,7 +524,7 @@ h3.card-title {
     align-items: flex-start;
     padding: var(--space-5);
     gap: var(--space-4);
-    transform: translateX(100%);
+    transform: translate(0px, 0px);
     transition: transform var(--transition-slow);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
