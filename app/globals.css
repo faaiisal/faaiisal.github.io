@@ -16,6 +16,8 @@
   --color-bg: #FAFAF9;
   --color-bg-alt: #F2F2F0;
   --color-bg-experience: #EEEDE9;
+  overflow-x: hidden;
+  max-width: 100%;
   /* Slightly deeper than bg-alt for Experience section */
   --color-surface: #FFFFFF;
   --color-surface-elevated: #FFFFFF;
@@ -140,6 +142,7 @@ body {
   -webkit-font-smoothing: antialiased;
   transition: background var(--transition-base), color var(--transition-base);
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 img {
@@ -524,14 +527,20 @@ h3.card-title {
     align-items: flex-start;
     padding: var(--space-5);
     gap: var(--space-4);
-    transform: translateX(0);
-    transition: transform var(--transition-slow);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    transform: translateX(100%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform var(--transition-slow),
+              visibility 0s linear var(--transition-slow);
   }
 
   .nav-links.is-open {
     transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform var(--transition-slow);
   }
 
   .nav-links a {
